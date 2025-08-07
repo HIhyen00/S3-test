@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Create .env for CD
-        run:
+        run: |
           echo "${{ secrets.ENV_PRODUCTION }}" > .env
 
       - name: Build and Push Docker Image
@@ -40,7 +40,7 @@ jobs:
           cd /home/ec2-user/s3-experiment/react
           docker-compose down
 
-          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.ACTOR }}
+          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.ACTOR }} --password-stdin
           docker pull ${{ env.DOCKER_IMAGE }}
 
           docker image prune -f
