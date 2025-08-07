@@ -26,7 +26,7 @@ FROM nginx:alpine
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 # 그리고 nginx가 빌드한 결과를 구동하도록
 # 빌드된 /app/dist 내용을 nginx가 구동할 /usr/share/nginx/html로 복사함.
-COPY --from=builder /app/dist usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 # nginx는 웹 서버이므로 80번 포트를 사용함
 EXPOSE 80
