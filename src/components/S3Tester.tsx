@@ -167,7 +167,7 @@ function S3Tester() {
                     <div className="relative">
                         <img
                             src="/assets/profile.jpg"
-                            alt="프로필"
+                            alt=""
                             className="w-32 h-32 rounded-full object-cover border-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1"
                             style={{
                                 background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
