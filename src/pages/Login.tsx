@@ -18,7 +18,7 @@ const Login: React.FC = () => {
   // 이미 로그인되어 있으면 S3TesterPage로 리다이렉션
   useEffect(() => {
     if (currentUser) {
-      navigate('/s3-tester');
+      navigate('/feed');
     }
   }, [currentUser, navigate]);
 
@@ -47,7 +47,7 @@ const Login: React.FC = () => {
         setShowLoginModal(true);
         setTimeout(() => {
           setShowLoginModal(false);
-          navigate('/s3-tester');
+          navigate('/feed');
         }, 1500);
         return;
       }
@@ -57,7 +57,7 @@ const Login: React.FC = () => {
         setShowLoginModal(true);
         setTimeout(() => {
           setShowLoginModal(false);
-          navigate('/s3-tester');
+          navigate('/feed');
         }, 1500);
       } else {
         setError('이메일 또는 비밀번호가 올바르지 않습니다.');
