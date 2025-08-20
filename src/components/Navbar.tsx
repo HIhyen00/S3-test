@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { FiSearch, FiUsers, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
 const Navbar: React.FC = () => {
   const { currentUser, isAuthenticated, logout } = useAuth();
@@ -33,11 +34,16 @@ const Navbar: React.FC = () => {
           </div>
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-4">
-              <Link to="/" className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-blue-400">홈</Link>
-              
               {isAuthenticated ? (
                 <>
-                  <Link to="/s3-tester" className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-blue-400">내 피드</Link>
+                  <Link to="/feed" className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-blue-400">내 피드</Link>
+                  <Link 
+                    to="/user-search" 
+                    className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-blue-400 flex items-center gap-1"
+                  >
+                    <FiUsers className="h-4 w-4" />
+                    <span>회원 검색</span>
+                  </Link>
                   <div className="relative">
                     <button 
                       className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-blue-400 flex items-center"

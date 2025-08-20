@@ -133,11 +133,11 @@ const StorageDebug: React.FC = () => {
     <div className="min-h-screen bg-black text-white">
       <Navbar />
       <div className="pt-24 container mx-auto px-4">
-        <h1 className="text-2xl font-bold mb-6">로컬 스토리지 디버그</h1>
+        <h1 className="text-2xl font-bold mb-6">회원 리스트</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-gray-900 p-6 rounded-lg">
-            <h2 className="text-xl font-semibold mb-4">현재 로컬 스토리지 내용</h2>
+            <h2 className="text-xl font-semibold mb-4">회원</h2>
             <button 
               onClick={refreshStorage}
               className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
@@ -200,12 +200,12 @@ const StorageDebug: React.FC = () => {
             </div>
             
             <div>
-              <h3 className="text-lg font-medium mb-3">스토리지 관리</h3>
+              <h3 className="text-lg font-medium mb-3">회원 관리</h3>
               <button
                 onClick={clearAllStorage}
                 className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
               >
-                모든 스토리지 초기화
+                모든 회원 초기화
               </button>
             </div>
           </div>

@@ -11,6 +11,7 @@ import {
     PutObjectCommand, DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import {useAuth} from "../context/AuthContext.tsx";
+import { useLocation } from "react-router-dom";
 
 const REGION = process.env.REACT_APP_S3_REGION!;
 const BUCKET = process.env.REACT_APP_S3_BUCKET!;
@@ -39,6 +40,12 @@ function S3Tester() {
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [showImageModal, setShowImageModal] = useState<string | null>(null); // 이미지 확대 모달
     const { currentUser, isAuthenticated, logout } = useAuth();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    // 쿼리 파라미터로 접근 시 username은 항상 DevOps_01로 고정
+    const hasUsernameParam = queryParams.has('username');
+    // 쿼리 파라미터로 접근하는 경우 표시할 사용자 이름
+    const displayUsername = hasUsernameParam ? "DevOps_01" : currentUser?.username;
 
     // 좋아요 토글 함수 추가
     const toggleLike = (fileKey: string) => {
@@ -138,8 +145,8 @@ function S3Tester() {
         fetchFiles();
     }, []);
 
-    // DevOps_01 사용자인지 확인
-    const isDevOpsUser = currentUser?.username === "DevOps_01";
+    // DevOps_01 사용자인지 확인 (현재 로그인한 사용자 또는 URL에 username 쿼리 파라미터가 있는 경우)
+    const isDevOpsUser = currentUser?.username === "DevOps_01" || hasUsernameParam;
     
     return (
         <div className="max-w-5xl mx-auto p-8 bg-[#1a1a1a] text-white rounded-lg shadow-md mt-10">
@@ -175,7 +182,7 @@ function S3Tester() {
                 {/* 프로필 정보 */}
                 <div className="flex-1">
                     <div className="flex items-center gap-4 mb-4">
-                        {isDevOpsUser && <h1 className="text-3xl font-light">{currentUser?.username}</h1>}
+                        {isDevOpsUser && <h1 className="text-3xl font-light">{displayUsername}</h1>}
                         {isDevOpsUser && (
                             <>
                                 <button className="bg-blue-500 text-white px-4 py-1 rounded font-medium text-sm hover:bg-blue-600">
@@ -378,7 +385,6 @@ function S3Tester() {
             )}
 
             {/* 우하단 고정 플러스 버튼 - DevOps_01 사용자만 표시 */}
-            {isDevOpsUser && (
                 <button
                     onClick={() => setShowUploadModal(true)}
                     className="fixed bottom-8 right-8 w-16 h-16 bg-blue-500 text-white rounded-full
@@ -387,10 +393,9 @@ function S3Tester() {
                 >
                     <FiPlus className="size-[32px]"/>
                 </button>
-            )}
 
             {/* 업로드 모달 - DevOps_01 사용자만 표시 */}
-            {isDevOpsUser && showUploadModal && (
+            {showUploadModal && (
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6"
                          onClick={(e) => e.stopPropagation()}>

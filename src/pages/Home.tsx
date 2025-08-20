@@ -55,6 +55,8 @@ const Home: React.FC = () => {
       {/* 네비게이션 바 */}
       <Navbar />
 
+
+
       {/* 히어로 섹션 */}
       <div className="pt-24 pb-16 md:pt-32 md:pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,7 +80,7 @@ const Home: React.FC = () => {
                       <span className="text-blue-400 font-bold">{currentUser?.username}</span>님, 환영합니다!
                     </p>
                     <p className="text-gray-300 text-sm mt-1">이미 로그인되어 있습니다. 내 피드를 확인해보세요.</p>
-                    <Link to="/s3-tester" className="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                    <Link to="/feed" className="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                       내 피드 바로가기
                       <svg className="ml-2 -mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -134,7 +136,7 @@ const Home: React.FC = () => {
                       </svg>
                     </Link>
                   ) : (
-                    <Link to="/s3-tester" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-blue-500 hover:bg-blue-600 transition duration-150 ease-in-out">
+                    <Link to="/feed" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-blue-500 hover:bg-blue-600 transition duration-150 ease-in-out">
                       내 피드 보기
                       <svg className="ml-2 -mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -309,7 +311,7 @@ const Home: React.FC = () => {
             ) : (
               <div className="inline-flex rounded-md shadow">
                 <Link
-                  to="/s3-tester"
+                  to="/feed"
                   className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-gray-900 bg-white hover:bg-gray-50 transition duration-150 ease-in-out"
                 >
                   내 피드 바로가기
@@ -318,7 +320,7 @@ const Home: React.FC = () => {
             )}
             <div className="ml-3 inline-flex">
               <Link
-                to="/s3-tester"
+                to="/feed"
                 className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 bg-opacity-80 hover:bg-opacity-90 transition duration-150 ease-in-out"
               >
                 타임라인 보기
