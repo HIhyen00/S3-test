@@ -71,7 +71,12 @@ function S3Tester() {
                 })
             );
             const fetchedFiles = res.Contents || [];
-            setFiles(fetchedFiles);
+
+            const sortedFiles = fetchedFiles.sort((a,b)=>
+                new Date(b.LastModified!).getTime() - new Date(a.LastModified!).getTime()
+            );
+
+            setFiles(sortedFiles);
 
             // 새로운 파일들에 대해서만 좋아요 수 생성
             const newLikes = { ...fileLikes };
@@ -206,9 +211,9 @@ function S3Tester() {
                     {/* 통계 정보 - DevOps_01 사용자만 표시 */}
                     {isDevOpsUser && (
                         <div className="flex gap-8 mb-4 text-white">
-                            <span><strong>게시물 {files.length}</strong></span>
-                            <span><strong>팔로워 1.5만</strong></span>
-                            <span><strong>팔로우 6</strong></span>
+                            <span><strong className="text-gray-400">게시물 </strong><strong>{files.length}</strong></span>
+                            <span><strong className="text-gray-400">팔로워</strong><strong> 1.5만</strong></span>
+                            <span><strong className="text-gray-400">팔로우</strong><strong> 6</strong></span>
                         </div>
                     )}
 
