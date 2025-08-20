@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import S3TesterPage from "./pages/S3TesterPage.tsx";
 import StorageDebug from "./pages/StorageDebug";
+import UserSearchPage from "./pages/UserSearchPage";
 
 // 인증 컨텍스트 임포트
 import { AuthProvider } from "./context/AuthContext";
@@ -17,8 +18,9 @@ const App = () => (
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/s3-tester" element={<S3TesterPage />} />
+                <Route path="/feed" element={<S3TesterPage />} />
                 <Route path="/debug" element={<StorageDebug />} />
+                <Route path="/user-search" element={<UserSearchPage />} />
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </Router>
