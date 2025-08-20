@@ -80,20 +80,36 @@ function S3Tester() {
 
             // 새로운 파일들에 대해서만 좋아요 수 생성
             const newLikes = { ...fileLikes };
+            
+            // fetchFiles 후에 새로 업로드된 파일의 좋아요 수가 다시 설정되지 않도록 여기서 먼저 설정
             fetchedFiles.forEach(file => {
+                // 이미 좋아요 정보가 있는 파일은 건드리지 않음
                 if (!newLikes[file.Key!]) {
-                    newLikes[file.Key!] = {
-                        count: Math.floor(Math.random() * 150) + 1,
-                        liked: false
-                    };
+                    // 새로 업로드된 파일이면 좋아요 수를 0으로 설정
+                    if (newUploadedKeys.has(file.Key!)) {
+                        newLikes[file.Key!] = {
+                            count: 0,
+                            liked: false
+                        };
+                    } else {
+                        // 기존 파일은 랜덤 값으로 설정
+                        newLikes[file.Key!] = {
+                            count: Math.floor(Math.random() * 150) + 1,
+                            liked: false
+                        };
+                    }
                 }
             });
+            
             setFileLikes(newLikes);
         } catch (err) {
             console.error("파일 목록 조회 실패:", err);
         }
         setLoading(false);
     };
+
+    // 새로 업로드된 파일의 키를 저장하는 상태
+    const [newUploadedKeys, setNewUploadedKeys] = useState<Set<string>>(new Set());
 
     const uploadFile = async () => {
         if (!selectedFile) return;
@@ -113,9 +129,38 @@ function S3Tester() {
                     ContentType: selectedFile.type,
                 })
             );
+            
+            // 새로 업로드된 파일의 키를 저장
+            setNewUploadedKeys(prev => {
+                const newSet = new Set(prev);
+                newSet.add(key);
+                return newSet;
+            });
+            
+            // 새로 업로드된 파일의 좋아요 수를 0으로 설정
+            setFileLikes(prev => ({
+                ...prev,
+                [key]: {
+                    count: 0,
+                    liked: false
+                }
+            }));
+            
             setSelectedFile(null);
             setShowUploadModal(false);
+            
+            // 파일 목록 갱신
             await fetchFiles();
+            
+            // fetchFiles 후에 새로 업로드된 파일의 좋아요 수가 다시 설정되지 않도록 한 번 더 강제로 설정
+            setFileLikes(prev => ({
+                ...prev,
+                [key]: {
+                    count: 0,
+                    liked: false
+                }
+            }));
+            
             alert("업로드 완료");
         } catch (err) {
             console.error("업로드 실패:", err);
