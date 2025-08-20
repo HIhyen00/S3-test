@@ -389,7 +389,8 @@ function S3Tester() {
                 </div>
             )}
 
-            {/* 우하단 고정 플러스 버튼 - DevOps_01 사용자만 표시 */}
+            {/* 우하단 고정 플러스 버튼 - DevOps_01 사용자이고 쿼리 파라미터가 없을 때만 표시 */}
+            {isDevOpsUser && !hasUsernameParam && (
                 <button
                     onClick={() => setShowUploadModal(true)}
                     className="fixed bottom-8 right-8 w-16 h-16 bg-blue-500 text-white rounded-full
@@ -398,9 +399,10 @@ function S3Tester() {
                 >
                     <FiPlus className="size-[32px]"/>
                 </button>
+            )}
 
-            {/* 업로드 모달 - DevOps_01 사용자만 표시 */}
-            {showUploadModal && (
+            {/* 업로드 모달 - DevOps_01 사용자이고 쿼리 파라미터가 없을 때만 표시 */}
+            {showUploadModal && isDevOpsUser && !hasUsernameParam && (
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6"
                          onClick={(e) => e.stopPropagation()}>
