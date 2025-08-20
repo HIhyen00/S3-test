@@ -10,6 +10,7 @@ import {
     ListObjectsV2Command,
     PutObjectCommand, DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
+import {useAuth} from "../context/AuthContext.tsx";
 
 const REGION = process.env.REACT_APP_S3_REGION!;
 const BUCKET = process.env.REACT_APP_S3_BUCKET!;
@@ -37,6 +38,7 @@ function S3Tester() {
     const [fileLikes, setFileLikes] = useState<{[key: string]: {count: number, liked: boolean}}>({});
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [showImageModal, setShowImageModal] = useState<string | null>(null); // 이미지 확대 모달
+    const { currentUser, isAuthenticated, logout } = useAuth();
 
     // 좋아요 토글 함수 추가
     const toggleLike = (fileKey: string) => {
@@ -136,10 +138,13 @@ function S3Tester() {
         fetchFiles();
     }, []);
 
+    // DevOps_01 사용자인지 확인
+    const isDevOpsUser = currentUser?.username === "DevOps_01";
+    
     return (
         <div className="max-w-5xl mx-auto p-8 bg-[#1a1a1a] text-white rounded-lg shadow-md mt-10">
-            {/* 모달 닫기용 배경 */}
-            {(showModal || showUploadModal || showImageModal) && (
+            {/* 모달 닫기용 배경 - DevOps_01 사용자만 표시 */}
+            {isDevOpsUser && (showModal || showUploadModal || showImageModal) && (
                 <div
                     className="fixed inset-0 z-40"
                     onClick={() => {
@@ -150,69 +155,86 @@ function S3Tester() {
                 />
             )}
 
-            {/* 프로필 섹션 */}
-            <div className="flex items-center gap-8 mb-8 pb-8 border-b border-gray-700">
-                {/* 프로필 이미지 */}
-                <div className="relative">
-                    <img
-                        src="/assets/profile.jpg"
-                        alt="프로필"
-                        className="w-32 h-32 rounded-full object-cover border-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1"
-                        style={{
-                            background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
-                            padding: '3px'
-                        }}
-                    />
-                </div>
+            {/* 프로필 섹션 - DevOps_01 사용자만 표시 */}
+            {isDevOpsUser && <div className="flex items-center gap-8 mb-8 pb-8 border-b border-gray-700">
+                {/* 프로필 이미지 - DevOps_01 사용자만 표시 */}
+                {isDevOpsUser && (
+                    <div className="relative">
+                        <img
+                            src="/assets/profile.jpg"
+                            alt="프로필"
+                            className="w-32 h-32 rounded-full object-cover border-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1"
+                            style={{
+                                background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
+                                padding: '3px'
+                            }}
+                        />
+                    </div>
+                )}
 
                 {/* 프로필 정보 */}
                 <div className="flex-1">
                     <div className="flex items-center gap-4 mb-4">
-                        <h1 className="text-3xl font-light">DevOps_01</h1>
-                        <button className="bg-blue-500 text-white px-4 py-1 rounded font-medium text-sm hover:bg-blue-600">
-                            팔로잉
-                        </button>
-                        <button className="bg-gray-200 text-black px-4 py-1 rounded font-medium text-sm hover:bg-gray-300">
-                            메시지 보내기
-                        </button>
-                        <div className="flex items-center gap-2">
-                            <button className="hover:bg-gray-100/50 hover:text-black p-1 rounded">
-                                <FiSettings />
-                            </button>
-                            <button className="hover:bg-gray-100/50 hover:text-black p-1 rounded">
-                                <FiMoreHorizontal />
-                            </button>
+                        {isDevOpsUser && <h1 className="text-3xl font-light">{currentUser?.username}</h1>}
+                        {isDevOpsUser && (
+                            <>
+                                <button className="bg-blue-500 text-white px-4 py-1 rounded font-medium text-sm hover:bg-blue-600">
+                                    팔로잉
+                                </button>
+                                <button className="bg-gray-200 text-black px-4 py-1 rounded font-medium text-sm hover:bg-gray-300">
+                                    메시지 보내기
+                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button className="hover:bg-gray-100/50 hover:text-black p-1 rounded">
+                                        <FiSettings />
+                                    </button>
+                                    <button className="hover:bg-gray-100/50 hover:text-black p-1 rounded">
+                                        <FiMoreHorizontal />
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+                    {/* 통계 정보 - DevOps_01 사용자만 표시 */}
+                    {isDevOpsUser && (
+                        <div className="flex gap-8 mb-4 text-white">
+                            <span><strong>게시물 {files.length}</strong></span>
+                            <span><strong>팔로워 1.5만</strong></span>
+                            <span><strong>팔로우 6</strong></span>
                         </div>
-                    </div>
+                    )}
 
-                    {/* 통계 정보 */}
-                    <div className="flex gap-8 mb-4 text-white">
-                        <span><strong>게시물 {files.length}</strong></span>
-                        <span><strong>팔로워 1.5만</strong></span>
-                        <span><strong>팔로우 6</strong></span>
-                    </div>
-
-                    {/* 소개 */}
-                    <div className="text-sm">
-                        <p className="text-gray-400">DevOps_team01🤗😏🙂😃😊</p>
-                    </div>
+                    {/* 소개 - DevOps_01 사용자만 표시 */}
+                    {isDevOpsUser && (
+                        <div className="text-sm">
+                            <p className="text-gray-400">DevOps_team01🤗😏🙂😃😊</p>
+                        </div>
+                    )}
                 </div>
-            </div>
+            </div>}
 
-            {loading && (
+            {isDevOpsUser && loading && (
                 <p className="text-center text-sm text-gray-500 mb-4">
                     로딩중 ......
                 </p>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
-                {files.length === 0 && !loading && (
-                    <p className="text-center text-gray-400 col-span-full">
-                        파일이 존재하지 않습니다
-                    </p>
-                )}
+            {!isDevOpsUser ? (
+                <div className="text-center py-10">
+                    <div className="text-6xl mb-4">📂</div>
+                    <h2 className="text-2xl font-bold mb-2">비어 있음</h2>
+                    <p className="text-gray-400 mb-6">표시할 내용이 없습니다.</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
+                    {files.length === 0 && !loading && (
+                        <p className="text-center text-gray-400 col-span-full">
+                            파일이 존재하지 않습니다
+                        </p>
+                    )}
 
-                {files.map((file) => {
+                    {files.map((file) => {
                     const fileName = file.Key.replace("uploads/", "")
                     const fileUrl = `https://${BUCKET}.s3.${REGION}.amazonaws.com/${file.Key}`
                     const isImage = isImageFile(fileName)
@@ -302,10 +324,11 @@ function S3Tester() {
                         </div>
                     )
                 })}
-            </div>
+                </div>
+            )}
 
-            {/* 이미지 확대 모달 */}
-            {showImageModal && (
+            {/* 이미지 확대 모달 - DevOps_01 사용자만 표시 */}
+            {isDevOpsUser && showImageModal && (
                 <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-60 p-4"
                      onClick={() => setShowImageModal(null)}>
                     <div className="relative w-full h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
@@ -354,18 +377,20 @@ function S3Tester() {
                 </div>
             )}
 
-            {/* 우하단 고정 플러스 버튼 */}
-            <button
-                onClick={() => setShowUploadModal(true)}
-                className="fixed bottom-8 right-8 w-16 h-16 bg-blue-500 text-white rounded-full
-                flex items-center justify-center text-2xl font-bold shadow-lg hover:bg-blue-600
-                transition-all duration-300 hover:scale-110 z-30"
-            >
-                <FiPlus className="size-[32px]"/>
-            </button>
+            {/* 우하단 고정 플러스 버튼 - DevOps_01 사용자만 표시 */}
+            {isDevOpsUser && (
+                <button
+                    onClick={() => setShowUploadModal(true)}
+                    className="fixed bottom-8 right-8 w-16 h-16 bg-blue-500 text-white rounded-full
+                    flex items-center justify-center text-2xl font-bold shadow-lg hover:bg-blue-600
+                    transition-all duration-300 hover:scale-110 z-30"
+                >
+                    <FiPlus className="size-[32px]"/>
+                </button>
+            )}
 
-            {/* 업로드 모달 */}
-            {showUploadModal && (
+            {/* 업로드 모달 - DevOps_01 사용자만 표시 */}
+            {isDevOpsUser && showUploadModal && (
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6"
                          onClick={(e) => e.stopPropagation()}>
